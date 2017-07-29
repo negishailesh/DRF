@@ -25,6 +25,18 @@ from snippets.permissions import IsOwnerOrReadOnly
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+from rest_framework import renderers
+
+
+
+
+class SnippetHighlight(generics.GenericAPIView):
+	queryset = Snippet.objects.all()
+	renderer_classes = (renderers.StaticHTMLRenderer,)
+
+	def get(serl , request , *args , **kwargs):
+		snippet = self.get_object()
+		return Response(snippet.highlighted)
 
 
 
@@ -52,7 +64,7 @@ class SnippetList(generics.ListCreateAPIView):
 	serializer_class = SnippetSerializer
 
 	def perform_create(self , serializer):
-		seralizer.save(owner = self.request.user)	
+		serializer.save(owner = self.request.user)	
 
 
 
